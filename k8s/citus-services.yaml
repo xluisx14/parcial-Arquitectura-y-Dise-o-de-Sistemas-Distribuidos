@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: citus-coordinator
+spec:
+  selector:
+    app: citus-coordinator
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: citus-workers
+spec:
+  clusterIP: None
+  selector:
+    app: citus-worker
+  ports:
+    - name: postgres
+      port: 5432

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: parcial-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: parcial-frontend
+  template:
+    metadata:
+      labels:
+        app: parcial-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: parcial_final_frontend:1.0
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000

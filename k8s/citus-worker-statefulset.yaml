@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: citus-worker
+spec:
+  selector:
+    matchLabels:
+      app: citus-worker
+  serviceName: citus-workers
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: citus-worker
+    spec:
+      containers:
+        - name: worker
+          image: citusdata/citus:latest
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: postgres123
+            - name: POSTGRES_DB
+              value: citus
+          volumeMounts:
+            - name: worker-data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: worker-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

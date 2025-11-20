@@ -1,0 +1,118 @@
+version: "3.8"
+
+services:
+  # ========================
+  # FRONTEND
+  # ========================
+  frontend:
+    build: ./frontend
+    container_name: parcial_final_frontend
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    networks:
+      - citus_net
+
+  # ========================
+  # BACKEND
+  # ========================
+  backend:
+    build: ./backend
+    container_name: parcial_final_backend
+    ports:
+      - "8001:8001"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres123@citus_coordinator:5432/citus
+    depends_on:
+      coordinator:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - citus_net
+
+  # ========================
+  # COORDINADOR CITUS
+  # ========================
+  coordinator:
+    image: citusdata/citus:latest
+    container_name: citus_coordinator
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+      POSTGRES_DB: citus
+    ports:
+      - "15432:5432"  # Puerto local para acceder desde host
+    volumes:
+      - citus_coordinator_data:/var/lib/postgresql/data
+    networks:
+      - citus_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d citus"]
+      interval: 5s
+      retries: 10
+      timeout: 5s
+
+  # ========================
+  # NODOS CITUS
+  # ========================
+  nodo1:
+    image: citusdata/citus:latest
+    container_name: citus_nodo1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+      POSTGRES_DB: citus
+    ports:
+      - "5433:5432"
+    volumes:
+      - citus_nodo1_data:/var/lib/postgresql/data
+    networks:
+      - citus_net
+    restart: unless-stopped
+
+  nodo2:
+    image: citusdata/citus:latest
+    container_name: citus_nodo2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+      POSTGRES_DB: citus
+    ports:
+      - "5434:5432"
+    volumes:
+      - citus_nodo2_data:/var/lib/postgresql/data
+    networks:
+      - citus_net
+    restart: unless-stopped
+
+  nodo3:
+    image: citusdata/citus:latest
+    container_name: citus_nodo3
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+      POSTGRES_DB: citus
+    ports:
+      - "5435:5432"
+    volumes:
+      - citus_nodo3_data:/var/lib/postgresql/data
+    networks:
+      - citus_net
+    restart: unless-stopped
+
+# ========================
+# VOLUMES
+# ========================
+volumes:
+  citus_coordinator_data:
+  citus_nodo1_data:
+  citus_nodo2_data:
+  citus_nodo3_data:
+
+# ========================
+# REDES
+# ========================
+networks:
+  citus_net:
+    driver: bridge

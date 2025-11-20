@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Médico{% endblock %}
+
+{% block content %}
+
+<form id="formAtencion" method="POST" action="/atencion/">
+  <input type="hidden" name="paciente_id" value="{{ paciente_id }}" />
+  Fecha y hora atención: <input type="datetime-local" name="fecha_hora_atencion" /><br/>
+  Tipo atención: <input type="text" name="tipo_atencion" /><br/>
+  Motivo consulta: <textarea name="motivo_consulta"></textarea><br/>
+  Enfermedad actual: <textarea name="enfermedad_actual"></textarea><br/>
+  Antecedentes personales: <textarea name="antecedentes_personales"></textarea><br/>
+  Antecedentes familiares: <textarea name="antecedentes_familiares"></textarea><br/>
+  Alergias: <textarea name="alergias"></textarea><br/>
+  Hábitos: <textarea name="habitos"></textarea><br/>
+  <button type="submit">Guardar Atención</button>
+</form>
+
+<form id="formCierre" method="POST" action="/cierre_historia/">
+  <input type="hidden" name="atencion_id" value="{{ atencion_id }}" />
+  Firma paciente: <input type="text" name="firma_paciente" /><br/>
+  Fecha y hora cierre: <input type="datetime-local" name="fecha_hora_cierre" /><br/>
+  Responsable registro: <input type="text" name="responsable_registro" /><br/>
+  <button type="submit">Cerrar Historia Clínica</button>
+</form>
+
+<p>Registro de observaciones y acceso completo.</p>
+{% endblock %}

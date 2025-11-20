@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: parcial-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: parcial-backend
+  template:
+    metadata:
+      labels:
+        app: parcial-backend
+    spec:
+      containers:
+        - name: backend
+          image: parcial_final_backend:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8001
+          env:
+            - name: DATABASE_URL
+              value: postgresql+asyncpg://postgres:postgres123@citus-coordinator:5432/citus
