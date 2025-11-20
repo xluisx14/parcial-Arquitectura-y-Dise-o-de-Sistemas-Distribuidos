@@ -6,7 +6,7 @@ body {
 }
 
 header, footer {
-    background-color: #0077cc;
+    background-color: #5800cc;
     color: white;
     text-align: center;
     padding: 15px 0;
@@ -50,7 +50,7 @@ input[type="text"], input[type="password"], select {
 button {
     width: 100%;
     padding: 10px;
-    background-color: #0077cc;
+    background-color: #5800cc;
     color: white;
     border: none;
     border-radius: 5px;
@@ -58,7 +58,7 @@ button {
 }
 
 button:hover {
-    background-color: #005fa3;
+    background-color: #5800cc;
 }
 
 .error {
